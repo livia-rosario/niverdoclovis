@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário com Bootstrap</title>
+    <title>Confirmação de Presença</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+        }
+        .submit-btn {
+            width: 100%;
+            font-size: 1.25rem;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -12,28 +22,36 @@
         <form id="rsvpForm">
             <div class="form-group">
                 <label for="name">Qual é o seu nome?</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome aqui">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Seu nome aqui" required>
             </div>
-            <div class="form-group">
-                <label for="guests">Quantos amigos você está trazendo?</label>
-                <input type="number" class="form-control" id="guests" name="guests" placeholder="Número de amigos">
+            <div id="additional-guests">
+                <!-- Campos de convidados adicionais serão adicionados aqui -->
             </div>
-            <div id="additional-guests"></div>
             <button type="button" class="btn btn-primary" onclick="addGuest()">Adicionar Mais Convidados</button>
-            <button type="submit" class="btn btn-success mt-3">Confirmar Presença</button>
+            <button type="submit" class="btn btn-success submit-btn mt-3">Confirmar Presença</button>
         </form>
     </div>
 
     <script>
         function addGuest() {
             var container = document.getElementById('additional-guests');
+            var index = container.children.length;
+            
             var div = document.createElement('div');
             div.classList.add('form-group');
             div.innerHTML = `
-                <label>Nome do amigo:</label>
-                <input type="text" class="form-control" name="additionalGuest[]" placeholder="Nome do convidado">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="additionalGuest[]" placeholder="Nome do convidado ${index + 1}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-danger remove-btn" type="button" onclick="removeGuest(this)">Remover</button>
+                    </div>
+                </div>
             `;
             container.appendChild(div);
+        }
+
+        function removeGuest(button) {
+            button.parentElement.parentElement.parentElement.remove();
         }
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -41,3 +59,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
