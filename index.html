@@ -53,10 +53,39 @@
         function removeGuest(button) {
             button.parentElement.parentElement.parentElement.remove();
         }
+
+        document.getElementById('rsvpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var name = document.getElementById('name').value;
+            var guests = Array.from(document.querySelectorAll('input[name="additionalGuest[]"]')).map(input => input.value);
+
+            var allNames = [name].concat(guests).join(', ');
+
+            var payload = {
+                names: allNames
+            };
+
+            fetch('URL_DO_SEU_WEB_APP', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then(response => response.json())
+              .then(data => {
+                  alert('Resposta enviada com sucesso!');
+                  document.getElementById('rsvpForm').reset();
+                  document.getElementById('additional-guests').innerHTML = '';
+              })
+              .catch(error => {
+                  console.error('Erro:', error);
+                  alert('Ocorreu um erro ao enviar a resposta.');
+              });
+        });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
